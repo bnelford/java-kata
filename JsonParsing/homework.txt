@@ -1,0 +1,59 @@
+Problem:
+Write code that converts the input JSON data to the output JSON format. It should be able to handle any number of levels of nesting. Each child can only have one parent (of type ‘folder’), and each parent may have multiple children (of type ‘folder’ or ‘file’).
+ 
+Deliverable is the source code and a working java console application that takes two parameters, input file and output file, reads in the input file, and writes the converted data to the output file.
+ 
+I expect to receive the deliverable prior to our scheduled interview for review. Expect to discuss the problem during the interview.
+ 
+ 
+Sample Input Data:
+[
+{
+       name:'file1',
+       parent:'folder1',
+       type:'file'
+},
+{
+       name:'file2',
+       parent:'folder2',
+       type:'file'
+},
+{
+       name:'folder1',
+       parent:'root',
+       type:'folder'
+},
+{
+       name:'folder2',
+       parent:'folder1',
+       type:'folder'
+}
+]
+ 
+Sample Output Data:
+[
+       {
+              name:'folder1',
+              parent:'root',
+              type:'folder',
+              children:[
+                     {
+                           name:'file1',
+                           parent:'folder1',
+                           type:'file'
+                     },
+                     {
+                           name:'folder2',
+                           parent:'folder1',
+                           type:'folder',
+                           children:[
+                                  {
+                                         name:'file2',
+                                         parent:'folder2',
+                                         type:'file'
+                                  }
+                           ]
+                     }
+              ]
+       }
+]

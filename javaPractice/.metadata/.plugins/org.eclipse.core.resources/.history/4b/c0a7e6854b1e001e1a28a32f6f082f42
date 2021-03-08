@@ -1,0 +1,302 @@
+//*****************************************************************************
+// ChessBoard.java		Author: Beau Nelford	3/31/2009
+// Creates a chessboard with an 8 x 8 arrangement where other methods can be
+// tested.
+//*****************************************************************************
+
+package cs1Ch11Review;
+
+public class ChessBoard
+{
+	int[][] board;
+	final int SIZE;
+
+	public ChessBoard (int[][] setup)		//!!!be careful as the x and y coordinates are backwards: board[y][x]
+	{
+		board = setup;
+		SIZE = board.length;
+	}
+	
+	public void printBoard ()
+	{
+		for (int i = 0; i<board.length; i++)			//x axis
+		{
+			for (int j = 0; j<board.length; j++)		//y axis
+			{
+				System.out.print(board[i][j] + " ");
+			}
+			System.out.println();
+		}
+	}
+	
+	public void placeQueen(int rem, int x, int y)
+	{
+		
+		boolean clear;
+		boolean already;
+		int remaining = rem;
+		int currX = x;
+		int currY = y;
+		
+		do
+		{
+			clear = checkPosition(x,y);
+			already = board[x][y] == 1;
+			
+			if (clear && !already)				//if the spot is clear, & doesn't already have a queen, 
+			{									//place the queen and run it again
+				board[y][x] = 1;
+				remaining--;
+				placeQueen(remaining, currX, currY);
+			}
+			else								// if the spot is not clear, go to the next space
+				if (currX < board.length-1)		// if it can move to the right, move to the right
+					currX++;
+				else							//if it can't move to the right, go to the next row
+					if (currY < board.length)	//if it can go to the next row, go to the next row
+					{
+						currX=0;
+						currY++;
+					}
+					else						//if it can't go to the next row, return to the top left
+					{
+						currX=0;
+						currY=0;
+					}
+			placeQueen(remaining, currX, currY);
+			
+		}
+		while (remaining < 0);
+	}
+	
+	public boolean checkPosition (int x, int y)
+	{
+		if (checkXs(x,y) && checkYs(x,y) && checkDiags(x, y))
+			return true;
+		return false;
+	}
+	
+	
+	public boolean checkXs (int x, int y)
+	{
+		if (checkXRight(x,y) && checkXLeft(x,y))
+			return true;
+		return false;
+	}
+	
+	public boolean checkXRight (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == SIZE-1)			// base case: if it hits a border, it is clear
+		{
+			answer = true;
+//			System.out.println("The rest of the " + y + " row to the right is clear");
+		}
+		else
+		{	
+			if (board[y][x+1] == 1)		// primary base case: if the square to the right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space to the right of " + x + "," + y + " is NOT clear");
+			}
+			else						//if it is clear, run it again
+			{
+//				System.out.println("The space to the right of " + x + "," + y + " is clear");
+				answer = checkXRight(x+1, y);
+			}
+				
+		}
+		return answer;
+	}
+	
+	public boolean checkXLeft (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == 0)			// base case: if it hits a border, it is clear,
+		{
+			answer = true;
+//			System.out.println("The rest of the " + y + " row to the left is clear");
+		}
+		else
+		{
+			if (board[y][x-1] == 1)		// primary base case: if the square to the right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space to the left of " + x + "," + y + " is NOT clear");
+			}
+			else						//if it is clear, run it again
+			{
+//				System.out.println("The space to the left of " + x + "," + y + " is clear");
+				answer = checkXLeft(x-1, y);
+			}
+		}
+		return answer;
+	}
+	
+	public boolean checkYs (int x, int y)
+	{
+		if (checkYUp(x,y) && checkYDown(x,y))
+			return true;
+		return false;
+	}
+	
+	public boolean checkYDown (int x, int y)
+	{
+		boolean answer;
+		
+		if (y == SIZE-1)			// base case: if it hits a border, it is clear,
+		{
+			answer = true;
+//			System.out.println("The rest of the " + x + " column below is clear");
+		}
+		else
+		{
+			if (board[y+1][x] == 1)		// primary base case: if the square to the right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space below " + x + "," + y + " is NOT clear");
+			}
+			else		//if it is clear, run it again
+			{
+//				System.out.println("The space below " + x + "," + y + " is clear");
+				answer = checkYDown(x, y+1);
+			}
+		}
+		return answer;
+	}
+	
+	public boolean checkYUp (int x, int y)
+	{
+		boolean answer;
+		
+		if (y == 0)			// base case: if it hits a border, it is clear,
+		{
+			answer = true;
+//			System.out.println("The rest of the " + x + " column above is clear");
+		}
+		else
+		{	
+			if (board[y-1][x] == 1)		// primary base case: if the square to the right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space above " + x + "," + y + " is NOT clear");
+			}
+			else	//if it is clear, run it again
+			{
+//				System.out.println("The space above " + x + "," + y + " is clear");
+				answer = checkXLeft(x, y-1);
+			}
+
+		}
+		return answer;
+	}
+	
+	public boolean checkDiags (int x, int y)		//recursive check?
+	{
+		if (checkUpperRight(x,y) && checkLowerRight(x,y) && checkUpperLeft(x,y) && checkLowerLeft(x,y))
+			return true;
+		return false;
+	}
+	
+	public  boolean checkUpperRight (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == SIZE-1 || y == 0)			// base case: if it hits a border, it is clear,
+		{
+//			System.out.println("The rest of the upper right diagnol is clear");
+			answer = true;
+		}
+		else
+		{
+			if (board[y-1][x+1] == 1)		// primary base case: if the square to the upper right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space above and to the right of " + x + "," + y + " is NOT clear");
+			}
+			else		//if it is clear, run it again
+			{
+//				System.out.println("The space above and to the right of " + x + "," + y + " is clear");
+				answer = checkUpperRight(x+1, y-1);
+			}
+		}
+		return answer;
+	}
+	
+	public boolean checkLowerRight (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == SIZE-1 || y == SIZE-1)			// base case: if it hits a border, it is clear,
+		{
+//			System.out.println("The rest of the lower right diagnol is clear");
+			answer = true;
+		}
+		else
+		{
+			if (board[y+1][x+1] == 1)		// primary base case: if the square to the upper right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space below and to the right of " + x + "," + y + " is NOT clear");
+			}
+			else		//if it is clear, run it again
+			{
+//				System.out.println("The space below and to the right of " + x + "," + y + " is clear");
+				answer = checkLowerRight(x+1, y+1);
+			}
+		}
+		return answer;
+	}
+	
+	public boolean checkUpperLeft (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == 0 || y == 0)			// base case: if it hits a border, it is clear,
+		{
+//			System.out.println("The rest of the upper left diagnol is clear");
+			answer = true;
+		}
+		else
+		{
+			if (board[y-1][x-1] == 1)		// primary base case: if the square to the upper right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space above and to the left of " + x + "," + y + " is NOT clear");
+			}
+			else		//if it is clear, run it again
+			{
+//				System.out.println("The space below and to the right of " + x + "," + y + " is clear");
+				answer = checkUpperLeft(x-1, y-1);
+			}
+		}
+		return answer;
+	}
+	
+	public boolean checkLowerLeft (int x, int y)
+	{
+		boolean answer;
+		
+		if (x == 0 || y == SIZE-1)			// base case: if it hits a border, it is clear,
+		{
+//			System.out.println("The rest of the lower left diagnol is clear");
+			answer = true;
+		}
+		else
+		{
+			if (board[y+1][x-1] == 1)		// primary base case: if the square to the upper right has a queen, not clear
+			{
+				answer = false;
+//				System.out.println("The space below and to the left of " + x + "," + y + " is NOT clear");
+			}
+			else		//if it is clear, run it again
+			{
+//				System.out.println("The space below and to the left of " + x + "," + y + " is clear");
+				answer = checkUpperLeft(x-1, y+1);
+			}
+		}
+		return answer;
+	}
+}

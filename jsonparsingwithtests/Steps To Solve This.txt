@@ -1,0 +1,30 @@
+Steps I took to solve this:
+Learn about JSON data format & standards
+Refamiliarize with Eclipse
+Download & Install eclipse
+Set up project
+Research Java JSON libraries, pick one to try out (org.json.simple, org.json, jackson) 
+Learn of their objects & methods
+Create principle class with main method
+Create manual In-memory representation of both the input JSON object and the output JSON object
+Changed libraries from org.json.simple to org.json
+Create filereader & file writer
+Added arguments to main
+Created parser to get input file into in-memory object
+Modeled change steps
+Brainstormed/Discussed algorithms to transform (recursion, brute force, tree map)
+****
+Chosen Algorithm:
+Recursion
+***Implement***
+Writing
+Debugging (Basic, with system.out)
+Playing with flawed inputs (Had bad spaces and bad quotes in text)
+
+***Test***
+Test with example input
+Tried to create larger json object arrays to test with (JSON GENERATOR)
+
+Attempt to run in terminal
+Export project as runnable Jar
+Zip

@@ -1,0 +1,22 @@
+[{
+    "name": "folder1",
+    "children": [
+        {
+            "name": "file1",
+            "parent": "folder1",
+            "type": "file"
+        },
+        {
+            "name": "folder2",
+            "children": [{
+                "name": "file2",
+                "parent": "folder2",
+                "type": "file"
+            }],
+            "parent": "folder1",
+            "type": "folder"
+        }
+    ],
+    "parent": "root",
+    "type": "folder"
+}]
